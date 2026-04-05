@@ -30,42 +30,18 @@ pos = 50;
 counter = 0;
 
 for (x of directions) {
-	const dir = x[0]
-	const clicks = +x.slice(1)
-	// console.log("")
-	// console.log("rotate = ", x)
+	const dir = x[0] == 'L' ? -1 : 1
+	const mag = +x.slice(1)
+	const clicks = dir * mag
 	const net = clicks % size
-	// console.log("net = ", net)
-	const rotations = Math.floor(Math.abs(clicks) / size)
-	// console.log("full rotations = ", rotations)
-	counter = counter + rotations
 
-	if (dir == 'R') {
-		if (pos + net >= 100 && pos != 0) {
-			counter++
-			// console.log("crosses zero = true")
-		}
-
-		pos = pos + net
-		// console.log("abs pos = ", pos)
-	} else {		
-		if (pos - net <= 0 && pos != 0) {
-			counter++
-			// console.log("crosses zero = true")
-		}
-
-		pos = pos - net
-		// console.log("abs pos = ", pos)
+	counter += Math.floor(Math.abs(clicks) / size)
+	
+	if (pos != 0 && pos + net <= 0 || pos + net >= size) {
+		counter++
 	}
-	// console.log("updated counter = ", counter)
-
-	if (pos >= 100) {
-		pos = pos - 100
-	}
-	if (pos < 0) {
-		pos = pos + 100
-	}
-	// console.log("real pos = ", pos)
+	
+	pos = (pos + net % size + size) % size
 }
 
 console.log("this is the password for part 2: ", counter)
