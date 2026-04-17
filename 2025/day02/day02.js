@@ -3,7 +3,7 @@ const fileName = process.argv[2];
 const fs = require('fs');
 const ranges = fs.readFileSync(fileName, 'utf-8').split(',');
 
-const isRepeatNum = function(num) {
+function isRepeatNum(num) {
     const digits = Math.floor(Math.log10(num)) + 1
     const factor = 10 ** (digits / 2)
     const left = Math.floor(num / factor)
@@ -12,7 +12,7 @@ const isRepeatNum = function(num) {
     return left == right
 }
 
-const sumRepeatIDs = function(ranges) {
+function sumRepeatIDs(ranges) {
     let sum = 0
 
     for (const range of ranges) {
