@@ -1,15 +1,22 @@
 // read from file with name passed in as argument
 const fileName = process.argv[2];
+const TEST = process.argv[3];
 const fs = require('fs');
 const ranges = fs.readFileSync(fileName, 'utf-8').split(',');
 
-function isRepeatNum(num) {
-    const digits = Math.floor(Math.log10(num)) + 1
-    const factor = 10 ** (digits / 2)
-    const left = Math.floor(num / factor)
-    const right = num % factor
+function isRepeatString(id) {
+    const size = id.length
 
-    return left == right
+    for (let groupSize = 1; groupSize < size; groupSize++) {
+        let group = id.slice(0, groupSize)
+        let workingID = group.repeat(Math.floor(size / groupSize))
+        
+        if (id == workingID) {
+            return true
+        }
+    }
+
+    return false
 }
 
 function sumRepeatIDs(ranges) {
@@ -17,14 +24,29 @@ function sumRepeatIDs(ranges) {
 
     for (const range of ranges) {
         const [start, end] = range.split("-").map(Number)
-        for (let i = start; i <= end; i++) {
-            if (isRepeatNum(i)) {   
-                sum += i
+        for (let id = start; id <= end; id++) {
+            if (isRepeatString(id.toString())) {  
+                sum += id
             }
         }
     }
-
     return sum
 }
 
-console.log("The sum of invalid IDs is:", sumRepeatIDs(ranges))
+function runTests() {
+    let test11 = isRepeatString('11') == true
+    let test12 = isRepeatString('12') == false
+    let test1212 = isRepeatString('1212') == true
+    let test1234 = isRepeatString('1234') == false
+    let test101 = isRepeatString('101') == false
+    let test121 = isRepeatString('121') == false
+    
+    let allTests = {test11, test12, test1212, test1234, test101, test121}
+    console.log(allTests)
+}
+
+if (TEST == 'test') {
+    runTests()
+} else {
+    console.log("The sum of invalid IDs is:", sumRepeatIDs(ranges))
+}
